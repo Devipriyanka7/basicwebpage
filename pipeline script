@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+    environment{
+        image_name = "myimage"
+        cont_name = "mycont1"
+    }
+
+    stages {
+        stage('code') {
+            steps {
+                git branch: 'main ', url: 'https://github.com/Devipriyanka7/basicwebpage.git'
+            }
+        }
+        stage('build'){
+            steps{
+                sh "docker build -t ${image_name} ."
+            }
+        }
+        stage('cont'){
+            steps{
+                sh "docker run -itd --name ${cont_name} -p 1234:80 ${image_name}" 
+            }
+        }
+    }
+}
